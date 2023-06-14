@@ -19,6 +19,7 @@ function App() {
   
   const [currentUser, setCurrentUser] = useState(null);
   const [userUID, setUserUID] = useState(null);
+  
   useEffect(() => {
     const auth = getAuth(app);
     const handleAuthStateChange = async (user) => {

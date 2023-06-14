@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Todo.css';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, setDoc, doc, collection ,getDocs} from 'firebase/firestore';
+import { getFirestore, setDoc, doc,deleteDoc, collection ,getDocs,updateDoc} from 'firebase/firestore';
 import { app, db } from '../Authentication/config/config';
 const Todo = (props) => {
   const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  const [todoArray, setTodoArray] = useState([]);
 
   const handleInputChange = (e) => {
     setTodos(e.target.value);
@@ -30,20 +30,53 @@ const Todo = (props) => {
       email: props.currentUser,
       todos: todos,
     });
-   
+
   };
-  
-  const handleDeleteTodo = (index) => {
-    const updatedTodos = [...todos];
-    updatedTodos.splice(index, 1);
-    setTodos(updatedTodos);
+  useEffect(()=>{
+   const getData=async()=>{
+    console.log(await getAllDocuments());
+    const todoArr = await getAllDocuments();
+    setTodoArray(todoArr);
+   }
+    getData();
+    return () => {
+        // Cleanup logic
+      };
+  },[todoArray])
+  const handleDeleteTodo = async(todoId) => {
+    const todoRef = doc(db, `todos of ${props.userUID}`, todoId);
+
+    try {
+      await deleteDoc(todoRef);
+      console.log('Todo deleted successfully.');
+     
+    } catch (error) {
+      console.error('Error deleting todo:', error);
+    }
   };
 
-  const handleUpdateTodo = (index, newValue) => {
-    const updatedTodos = [...todos];
-    updatedTodos[index] = newValue;
-    setTodos(updatedTodos);
+  const handleUpdateTodo = async(todoId) => {
+    const todoRef = doc(db, `todos of ${props.userUID}`, todoId);
+const newTodo=prompt("Edit Your Todo");
+  const newValue = {
+    todos: newTodo,
+    email: props.currentUser,
+    
   };
+    try {
+      await updateDoc(todoRef, newValue);
+      console.log('Todo updated successfully.');
+    } catch (error) {
+      console.error('Error updating todo:', error);
+    }
+  };
+  
+  // ...
+  
+  // Example usage
+//   const todoId = 'your-todo-id';
+
+  
 
   return (
     <div className="todo-container">
@@ -58,10 +91,16 @@ const Todo = (props) => {
         <button onClick={handleAddTodo}>Add Todo</button>
       </div>
       <ul className="todo-list">
-      
+      {todoArray.map((todo, index) => (
+          <li key={index}>
+         <p>{todo.todos}</p>
+         <button className='update' onClick={() => handleUpdateTodo(todo.id)}>Update</button> 
+            <button className='delete' onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+          </li>
+        ))}
       </ul>
     </div>
   );
-};
+      };
 
 export default Todo;
