@@ -29,8 +29,10 @@ const Header = (props) => {
       };
     return (
         <div className="header">
-        <h1 className='todoList-header' >To-Do List</h1>
-        <i style={{color:'grey'}} >Please Login to Make your custom To do List</i>
+        <h1 className='todoList-header'style={{
+          color:'#eea01b'
+        }} >To-Do List</h1>
+        <i style={{color:'grey'}} >Make your custom To do List</i>
      {
       props.currentUser==null?
       <div>
@@ -57,8 +59,14 @@ signOut(auth).then(() => {
       </div>
      }
         <div>
-     
-
+    <br />
+<i style={
+{
+  color:'grey', fontSize:'25px'
+}
+}>
+welcome : {props.currentUser}
+</i>
     </div>
     <div>
       <br />

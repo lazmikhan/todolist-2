@@ -14,27 +14,41 @@ import SignUp from './components/Authentication/SignUp';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from 'react';
 import { app, db } from './components/Authentication/config/config';
-
+import { doc, getDoc } from 'firebase/firestore';
 function App() {
   
   const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
     const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    const handleAuthStateChange = async (user) => {
       if (user) {
+       
+
+        try {
+          const userDocRef = doc(db, 'users', user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            setCurrentUser(userDocSnap.data().name);
+            console.log('state changed:', currentUser);
+          }
+        } catch (error) {
+          console.error('Error retrieving user data:', error);
+        }
+
       
-        const uid = user.email;
-        setCurrentUser(user.email);
-        console.log("state changed:", uid);
-        // ...
       } else {
         // User is signed out
-        // ...
+        setCurrentUser(null);
       }
-    });
+    };
 
-  
-  }, []); 
+    const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange);
+
+    return () => {
+      unsubscribe(); // Unsubscribe from the onAuthStateChanged listener when component unmounts
+    };
+  }, []);
 
 
   return (
