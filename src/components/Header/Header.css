@@ -1,0 +1,35 @@
+.header {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .todoList-header {
+    color: #333;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+  }
+  .button {
+    background-color: #eea01b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #edaa2f;
+  }
+  
+  .login-button {
+    margin-right: 10px;
+  }
+  
+  .signup-button {
+    margin-left: 10px;
+  }
+  
