@@ -29,7 +29,7 @@
   }
   
   .todo-list li {
-    display: flex;
+ 
     align-items: center;
     margin-bottom: 10px;
   }
