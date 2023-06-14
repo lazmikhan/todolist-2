@@ -37,7 +37,7 @@ const SignUp = () => {
       
       } catch (error) {
         console.error('Error creating user:', error);
-        setErrorReg(error);
+        setErrorReg("error");
         
       }
    

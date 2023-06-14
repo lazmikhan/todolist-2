@@ -18,6 +18,7 @@ import { doc, getDoc } from 'firebase/firestore';
 function App() {
   
   const [currentUser, setCurrentUser] = useState(null);
+  const [userUID, setUserUID] = useState(null);
   useEffect(() => {
     const auth = getAuth(app);
     const handleAuthStateChange = async (user) => {
@@ -30,6 +31,7 @@ function App() {
 
           if (userDocSnap.exists()) {
             setCurrentUser(userDocSnap.data().name);
+            setUserUID(user.uid);
             console.log('state changed:', currentUser);
           }
         } catch (error) {
@@ -61,7 +63,7 @@ function App() {
           renders the first one that matches the current URL. */}
       <Switch>
         <Route exact path="/">
-          <Home currentUser={currentUser} />
+          <Home currentUser={currentUser} userUID={userUID} />
         </Route>
         <Route path="/login">
           <Login />

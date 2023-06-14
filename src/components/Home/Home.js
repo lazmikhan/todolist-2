@@ -8,7 +8,7 @@ const Home = (props) => {
             <Header currentUser={props.currentUser}></Header>
             {
                 props.currentUser!=null?
-                <Todo currentUser={props.currentUser}></Todo>:
+                <Todo userUID={props.userUID} currentUser={props.currentUser}></Todo>:
                 <>
                 <p style={{textAlign:'center', color:'grey', fontSize:'25px'}}>Please Login to Add your own Todo List</p>
                 </>
